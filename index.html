@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="th" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>เกมเปิดแผ่นป้ายระบบย่อยอาหาร</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { 
+      font-family: 'Kanit', sans-serif; 
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    .card-flip {
+      perspective: 1000px;
+    }
+    
+    .card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+    }
+    
+    .card-flipped .card-inner {
+      transform: rotateY(180deg);
+    }
+    
+    .card-front, .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: clamp(8px, 2vw, 16px);
+    }
+    
+    .card-back {
+      transform: rotateY(180deg);
+    }
+    
+    @keyframes bounce-in {
+      0% { transform: scale(0.9); opacity: 0; }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.4); }
+      50% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.7); }
+    }
+    
+    .animate-bounce-in {
+      animation: bounce-in 0.4s ease-out forwards;
+    }
+    
+    .animate-pulse-glow {
+      animation: pulse-glow 1.5s ease-in-out infinite;
+    }
+    
+    .card-hover:hover:not(.card-flipped) {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+    
+    .gradient-team1 {
+      background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+    }
+    
+    .gradient-team2 {
+      background: linear-gradient(135deg, #4FACFE 0%, #00F2FE 100%);
+    }
+    
+    .star-burst {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+    }
+
+    /* สไตล์สำหรับการปรับแต่ง Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(0,0,0,0.1);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.2);
+      border-radius: 10px;
+    }
+  </style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+</head>
+<body class="h-full bg-[#1a1a2e] text-white selection:bg-pink-500 selection:text-white">
+  <div id="app" class="min-h-full w-full flex flex-col">
+    
+    <!-- Start Screen -->
+    <div id="start-screen" class="min-h-full w-full flex flex-col items-center justify-start md:justify-center p-4 relative overflow-y-auto" style="background: url('https://img2.pic.in.th/Gemini_Generated_Image_e3n03ce3n03ce3n0.png') center/cover no-repeat;">
+      <div class="absolute inset-0 bg-gradient-to-b from-purple-900/80 via-indigo-900/70 to-blue-900/80"></div>
+      
+      <div class="relative z-10 text-center max-w-4xl mx-auto w-full py-8 md:py-0">
+        <!-- Title Section -->
+        <div class="mb-6 md:mb-10 animate-bounce-in px-2">
+          <div class="inline-block bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 p-1 md:p-2 rounded-3xl shadow-2xl">
+            <div class="bg-white/95 rounded-2xl px-4 py-4 md:px-10 md:py-8">
+              <h1 class="text-3xl sm:text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500 leading-tight">🎮 เกมเปิดแผ่นป้าย</h1>
+              <h2 class="text-xl sm:text-2xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-600 via-teal-500 to-blue-600 mt-1 md:mt-2">ระบบย่อยอาหาร 🍎</h2>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Forms and Rules Container -->
+        <div class="grid md:grid-cols-2 gap-4 md:gap-6 mb-8 max-w-4xl mx-auto">
+          <!-- Player Info -->
+          <div class="bg-white/95 rounded-2xl p-5 md:p-6 shadow-xl border-t-4 border-blue-500 text-left">
+            <h3 class="text-lg md:text-xl font-bold text-blue-600 mb-4 flex items-center gap-2"><span>👤</span> ข้อมูลผู้เล่น</h3>
+            <div class="space-y-3">
+              <input id="player-name" type="text" placeholder="ชื่อ-นามสกุล" class="w-full px-4 py-2.5 rounded-xl border-2 border-gray-200 focus:border-blue-400 focus:outline-none text-gray-700 font-medium">
+              <div class="grid grid-cols-2 gap-3">
+                <input id="player-class" type="text" placeholder="ชั้นเรียน" class="w-full px-4 py-2.5 rounded-xl border-2 border-gray-200 focus:border-blue-400 focus:outline-none text-gray-700 font-medium">
+                <input id="player-number" type="number" placeholder="เลขที่" class="w-full px-4 py-2.5 rounded-xl border-2 border-gray-200 focus:border-blue-400 focus:outline-none text-gray-700 font-medium">
+              </div>
+            </div>
+          </div>
+          
+          <!-- Rules -->
+          <div class="bg-white/95 rounded-2xl p-5 md:p-6 shadow-xl border-t-4 border-yellow-500 text-left">
+            <h3 class="text-lg md:text-xl font-bold text-purple-600 mb-3 flex items-center gap-2"><span>📋</span> กติกา</h3>
+            <ul class="text-gray-600 space-y-2 text-sm md:text-base font-medium">
+              <li class="flex items-center gap-2">🟢 แบ่งเป็น 2 ทีม สลับกันเปิดแผ่นป้าย</li>
+              <li class="flex items-center gap-2">🟢 ตอบถูกรับคะแนนตามแผ่นป้ายนั้น</li>
+              <li class="flex items-center gap-2">🟢 ระวัง! มีแผ่นป้ายพิเศษซ่อนอยู่</li>
+            </ul>
+          </div>
+        </div>
+        
+        <button id="start-btn" class="group relative px-10 py-4 md:px-14 md:py-6 bg-gradient-to-r from-green-400 to-emerald-600 rounded-full text-white text-2xl md:text-4xl font-bold shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300">
+          <span>🚀 เริ่มสนุกกันเลย!</span>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Game Board Screen -->
+    <div id="game-screen" class="hidden flex-1 flex flex-col p-3 md:p-6 relative overflow-hidden" style="background: url('https://img2.pic.in.th/Gemini_Generated_Image_e3n03ce3n03ce3n0.png') center/cover no-repeat fixed;">
+      <div class="absolute inset-0 bg-gradient-to-b from-indigo-900/90 via-[#1a1a2e]/85 to-pink-900/90 fixed"></div>
+      
+      <div class="relative z-10 max-w-6xl mx-auto w-full flex flex-col h-full">
+        <!-- Header Controls -->
+        <div class="flex justify-between items-center mb-4">
+          <button id="home-btn" class="px-3 py-1.5 md:px-5 md:py-2 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white border border-white/20 rounded-xl text-sm md:text-base font-bold transition-all flex items-center gap-2"> 
+            <i data-lucide="home" class="w-4 h-4 md:w-5 md:h-5"></i> หน้าหลัก 
+          </button>
+          <div class="bg-black/30 backdrop-blur-md px-4 py-1.5 rounded-full border border-white/10 text-xs md:text-sm font-medium">
+            🧬 หน่วยที่ 1: ระบบร่างกายมนุษย์
+          </div>
+        </div>
+        
+        <!-- Scoreboard Container -->
+        <div class="grid grid-cols-12 gap-3 mb-6">
+          <!-- Team 1 -->
+          <div class="col-span-4 md:col-span-3 gradient-team1 rounded-2xl p-3 md:p-5 shadow-lg border-2 border-white/20 text-center">
+            <p id="team1-label" class="text-xs md:text-lg font-bold truncate">🔴 ทีม 1</p>
+            <p id="team1-score" class="text-2xl md:text-5xl font-black">0</p>
+          </div>
+          
+          <!-- Turn Indicator -->
+          <div class="col-span-4 md:col-span-6 bg-white/10 backdrop-blur-lg rounded-2xl p-2 md:p-4 border border-white/20 flex flex-col items-center justify-center text-center">
+            <span class="text-[10px] md:text-sm uppercase tracking-widest opacity-70 mb-1">กำลังเล่น</span>
+            <p id="current-turn" class="text-sm md:text-2xl font-black text-yellow-400 truncate">ทีม 1</p>
+            <button id="next-team-btn" class="mt-2 px-3 py-1 bg-white/20 hover:bg-white/30 rounded-full text-[10px] md:text-xs font-bold transition-all"> 🔄 สลับทีม </button>
+          </div>
+          
+          <!-- Team 2 -->
+          <div class="col-span-4 md:col-span-3 gradient-team2 rounded-2xl p-3 md:p-5 shadow-lg border-2 border-white/20 text-center">
+            <p id="team2-label" class="text-xs md:text-lg font-bold truncate">🔵 ทีม 2</p>
+            <p id="team2-score" class="text-2xl md:text-5xl font-black">0</p>
+          </div>
+        </div>
+        
+        <!-- Game Board - Flexible Grid -->
+        <div class="flex-1 overflow-y-auto pb-6">
+          <div id="game-board" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 md:gap-4">
+            <!-- Cards generated here -->
+          </div>
+        </div>
+        
+        <!-- Bottom Stats -->
+        <div class="mt-4 bg-black/40 backdrop-blur-md rounded-2xl p-3 border border-white/10">
+          <div class="flex items-center justify-between text-xs md:text-base font-bold mb-2">
+            <span>📈 ความคืบหน้าการสำรวจ</span>
+            <span id="progress-text" class="text-pink-400">0/24</span>
+          </div>
+          <div class="w-full bg-white/10 h-2 md:h-3 rounded-full overflow-hidden">
+            <div id="progress-bar" class="h-full bg-gradient-to-r from-pink-500 to-purple-500 transition-all duration-700" style="width: 0%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Question Modal - Responsive -->
+    <div id="question-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 md:p-4">
+      <div class="absolute inset-0 bg-black/80 backdrop-blur-md"></div>
+      <div class="relative bg-white text-gray-800 rounded-3xl p-5 md:p-10 max-w-2xl w-full shadow-2xl border-4 border-yellow-400 animate-bounce-in">
+        <div id="points-display" class="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-yellow-400 to-orange-500 px-6 py-1.5 rounded-full shadow-lg text-white font-bold text-sm md:text-lg whitespace-nowrap">
+          💎 10 คะแนน
+        </div>
+        <div class="mt-2">
+          <h3 id="question-text" class="text-xl md:text-3xl font-bold text-center text-purple-700 mb-8 leading-snug">คำถาม?</h3>
+          <div id="choices-container" class="grid grid-cols-1 gap-3 md:gap-4">
+            <!-- Choices -->
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Result Modal -->
+    <div id="result-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div class="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
+      <div class="relative bg-white rounded-3xl p-8 max-w-sm w-full text-center shadow-2xl animate-bounce-in">
+        <div id="result-icon" class="text-7xl md:text-8xl mb-4">✅</div>
+        <h3 id="result-title" class="text-2xl md:text-3xl font-bold mb-2">ตอบถูก!</h3>
+        <p id="result-message" class="text-lg text-gray-500 mb-6">ได้รับ 10 คะแนน</p>
+        <button id="next-turn-btn" class="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-2xl font-bold text-lg hover:scale-105 transition-transform"> ตกลง </button>
+      </div>
+    </div>
+
+    <!-- Special Card Modal -->
+    <div id="special-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div class="absolute inset-0 bg-black/80 backdrop-blur-md"></div>
+      <div id="special-modal-content" class="relative rounded-3xl p-10 max-w-md w-full text-center shadow-2xl animate-bounce-in">
+        <div id="special-icon" class="text-8xl mb-4">🎁</div>
+        <h3 id="special-title" class="text-3xl font-bold text-white mb-2">ยินดีด้วย!</h3>
+        <p id="special-message" class="text-xl text-white/90 mb-8">คุณได้รับโบนัส</p>
+        <button id="special-close-btn" class="w-full py-4 bg-white text-purple-700 rounded-2xl font-bold text-lg"> รับรางวัล </button>
+      </div>
+    </div>
+
+    <!-- End Screen -->
+    <div id="end-screen" class="hidden min-h-full w-full flex items-center justify-center p-4 overflow-y-auto" style="background: #1a1a2e">
+      <div class="max-w-xl w-full text-center">
+        <div class="text-8xl mb-6 animate-bounce">🏆</div>
+        <h2 class="text-4xl md:text-6xl font-black mb-8 text-yellow-400">จบการสำรวจ!</h2>
+        
+        <div class="bg-white/10 backdrop-blur-md rounded-3xl p-8 border border-white/20 mb-8">
+          <h3 class="text-xl font-bold mb-6 text-gray-300">สรุปคะแนนสุดท้าย</h3>
+          <div class="grid grid-cols-2 gap-4 mb-8">
+            <div class="gradient-team1 p-4 rounded-2xl">
+              <p class="font-bold opacity-80" id="end-team1-label">ทีม 1</p>
+              <p class="text-4xl font-black" id="end-team1-score">0</p>
+            </div>
+            <div class="gradient-team2 p-4 rounded-2xl">
+              <p class="font-bold opacity-80" id="end-team2-label">ทีม 2</p>
+              <p class="text-4xl font-black" id="end-team2-score">0</p>
+            </div>
+          </div>
+          <div id="winner-announcement" class="text-2xl md:text-3xl font-black text-yellow-400 animate-pulse">
+            ทีม 1 ชนะ!
+          </div>
+        </div>
+        
+        <button id="restart-btn" class="px-12 py-5 bg-gradient-to-r from-green-400 to-emerald-600 rounded-full font-bold text-xl hover:scale-105 transition-all">
+          🔄 เริ่มสำรวจใหม่
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // --- Audio System ---
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playSound(type) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      const now = audioCtx.currentTime;
+
+      if (type === 'flip') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(200, now);
+        osc.frequency.exponentialRampToValueAtTime(400, now + 0.1);
+        gain.gain.setValueAtTime(0.1, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+        osc.start(); osc.stop(now + 0.1);
+      } else if (type === 'success') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(500, now);
+        osc.frequency.exponentialRampToValueAtTime(1000, now + 0.3);
+        gain.gain.setValueAtTime(0.1, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+        osc.start(); osc.stop(now + 0.3);
+      } else if (type === 'fail') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(200, now);
+        osc.frequency.linearRampToValueAtTime(100, now + 0.4);
+        gain.gain.setValueAtTime(0.1, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.4);
+        osc.start(); osc.stop(now + 0.4);
+      }
+    }
+
+    // --- Game Logic ---
+    const defaultConfig = {
+      game_title: 'เกมเปิดแผ่นป้ายระบบย่อยอาหาร',
+      team1_name: 'ทีม 1',
+      team2_name: 'ทีม 2'
+    };
+    let config = { ...defaultConfig };
+
+    const questions = [
+      { q: "อวัยวะใดเป็นจุดเริ่มต้นของระบบย่อยอาหาร?", choices: ["ปาก", "กระเพาะอาหาร"], answer: 0 },
+      { q: "การบดเคี้ยวอาหารเกิดขึ้นที่อวัยวะใด?", choices: ["หลอดอาหาร", "ปาก"], answer: 1 },
+      { q: "เอนไซม์ในน้ำลายช่วยย่อยสารอาหารประเภทใด?", choices: ["โปรตีน", "คาร์โบไฮเดรต"], answer: 1 },
+      { q: "อวัยวะใดทำหน้าที่ลำเลียงอาหารจากปากไปยังกระเพาะอาหาร?", choices: ["หลอดอาหาร", "ลำไส้เล็ก"], answer: 0 },
+      { q: "ระบบย่อยอาหาร มีการย่อยสารอาหารประเภทโปรตีนที่อวัยวะใด?", choices: ["ลำไส้เล็ก", "กระเพาะอาหาร"], answer: 1 },
+      { q: "อวัยวะใดเป็นแหล่งดูดซึมสารอาหารมากที่สุด?", choices: ["ลำไส้เล็ก", "ลำไส้ใหญ่"], answer: 0 },
+      { q: "อวัยวะใดช่วยสร้างน้ำดี?", choices: ["ตับ", "ตับอ่อน"], answer: 0 },
+      { q: "น้ำดีมีหน้าที่ช่วยย่อยสารอาหารประเภทใด?", choices: ["โปรตีน", "ไขมัน"], answer: 1 },
+      { q: "ลำไส้ใหญ่ทำหน้าที่สำคัญข้อใด?", choices: ["ดูดน้ำและเกลือแร่", "ย่อยโปรตีน"], answer: 0 },
+      { q: "กากอาหารจะถูกขับถ่ายออกทางอวัยวะใด?", choices: ["หลอดอาหาร", "ทวารหนัก"], answer: 1 },
+      { q: "การย่อยอาหารเชิงกลหมายถึงข้อใด?", choices: ["การบดเคี้ยวอาหาร", "การใช้เอนไซม์"], answer: 0 },
+      { q: "อาหารที่มีกากใยสูงช่วยในเรื่องใด?", choices: ["การขับถ่าย", "การมองเห็น"], answer: 0 },
+      { q: "เอนไซม์เปปซินย่อยสารอาหารชนิดใด?", choices: ["แป้ง", "โปรตีน"], answer: 1 },
+      { q: "การย่อยทางเคมีเกิดขึ้นครั้งแรกที่ไหน?", choices: ["ปาก", "กระเพาะ"], answer: 0 },
+      { q: "ส่วนใดของลำไส้เล็กที่มีการดูดซึมมากที่สุด?", choices: ["ส่วนต้น", "ส่วนกลาง"], answer: 1 },
+      { q: "การดูดซึมน้ำกลับเกิดขึ้นมากที่สุดที่ไหน?", choices: ["ลำไส้เล็ก", "ลำไส้ใหญ่"], answer: 1 },
+      { q: "อวัยวะใดผลิตน้ำย่อยได้เกือบทุกประเภท?", choices: ["ตับ", "ตับอ่อน"], answer: 1 },
+      { q: "ทางเดินอาหารยาวประมาณกี่เมตร?", choices: ["5 เมตร", "9 เมตร"], answer: 1 },
+      { q: "อาหารค้างอยู่ในกระเพาะนานแค่ไหน?", choices: ["2-4 ชม.", "10-12 ชม."], answer: 0 },
+      { q: "กรดในกระเพาะคือกรดชนิดใด?", choices: ["กรดกำมะถัน", "กรดเกลือ"], answer: 1 }
+    ];
+
+    const specialCards = [
+      { type: 'jackpot', points: 20, icon: '💎', title: 'สมบัติล้ำค่า!', color: 'bg-gradient-to-br from-yellow-400 to-orange-600' },
+      { type: 'bonus', points: 15, icon: '⭐', title: 'โบนัสพิเศษ!', color: 'bg-gradient-to-br from-blue-400 to-indigo-600' },
+      { type: 'penalty', points: -10, icon: '⚠️', title: 'กับดักสารพิษ!', color: 'bg-gradient-to-br from-gray-700 to-black' },
+      { type: 'jackpot', points: 30, icon: '👑', title: 'แจ็คพอตใหญ่!', color: 'bg-gradient-to-br from-pink-500 to-red-600' }
+    ];
+
+    let gameState = {
+      team1Score: 0,
+      team2Score: 0,
+      currentTeam: 1,
+      cardsOpened: 0,
+      cards: []
+    };
+
+    function initCards() {
+      let cards = [];
+      let qList = [...questions].sort(() => Math.random() - 0.5);
+      let sList = [...specialCards].sort(() => Math.random() - 0.5);
+      let specialIndices = [];
+      while(specialIndices.length < 4) {
+        let idx = Math.floor(Math.random() * 24);
+        if(!specialIndices.includes(idx)) specialIndices.push(idx);
+      }
+
+      let qIdx = 0, sIdx = 0;
+      for(let i=0; i<24; i++) {
+        if(specialIndices.includes(i)) {
+          cards.push({ id: i+1, type: 'special', data: sList[sIdx++], opened: false });
+        } else {
+          cards.push({ id: i+1, type: 'question', data: qList[qIdx++], points: [5,10,15][Math.floor(Math.random()*3)], opened: false });
+        }
+      }
+      return cards;
+    }
+
+    function renderBoard() {
+      const board = document.getElementById('game-board');
+      board.innerHTML = '';
+      const colors = ['from-purple-500 to-indigo-600', 'from-blue-500 to-cyan-600', 'from-emerald-500 to-teal-600', 'from-orange-500 to-amber-600', 'from-rose-500 to-pink-600'];
+
+      gameState.cards.forEach((card, idx) => {
+        const div = document.createElement('div');
+        div.className = `card-flip aspect-square cursor-pointer card-hover ${card.opened ? 'card-flipped pointer-events-none' : ''}`;
+        div.innerHTML = `
+          <div class="card-inner">
+            <div class="card-front bg-gradient-to-br ${colors[idx % colors.length]} flex items-center justify-center border-2 border-white/30 shadow-lg">
+              <div class="star-burst"></div>
+              <span class="text-2xl md:text-4xl font-black text-white">${card.id}</span>
+            </div>
+            <div class="card-back bg-white/10 backdrop-blur-md flex items-center justify-center border-2 border-white/10 shadow-inner">
+              <span class="text-xl md:text-3xl">✅</span>
+            </div>
+          </div>
+        `;
+        div.onclick = () => handleCardClick(card, div);
+        board.appendChild(div);
+      });
+    }
+
+    function handleCardClick(card, el) {
+      if(card.opened) return;
+      playSound('flip');
+      card.opened = true;
+      el.classList.add('card-flipped');
+      gameState.cardsOpened++;
+      updateStats();
+
+      setTimeout(() => {
+        if(card.type === 'special') showSpecial(card.data);
+        else showQuestion(card);
+      }, 500);
+    }
+
+    function showQuestion(card) {
+      const modal = document.getElementById('question-modal');
+      document.getElementById('question-text').textContent = card.data.q;
+      document.getElementById('points-display').textContent = `💎 ${card.points} คะแนน`;
+      
+      const container = document.getElementById('choices-container');
+      container.innerHTML = '';
+      card.data.choices.forEach((choice, i) => {
+        const btn = document.createElement('button');
+        btn.className = `p-4 md:p-6 rounded-2xl text-lg md:text-2xl font-bold transition-all text-white shadow-lg ${i===0 ? 'bg-gradient-to-r from-orange-400 to-red-500' : 'bg-gradient-to-r from-blue-500 to-purple-600'} hover:scale-102 active:scale-95`;
+        btn.textContent = choice;
+        btn.onclick = () => {
+          modal.classList.add('hidden');
+          if(i === card.data.answer) {
+            playSound('success');
+            if(gameState.currentTeam === 1) gameState.team1Score += card.points;
+            else gameState.team2Score += card.points;
+            showResult(true, card.points);
+          } else {
+            playSound('fail');
+            showResult(false, 0);
+          }
+          updateStats();
+        };
+        container.appendChild(btn);
+      });
+      modal.classList.remove('hidden');
+    }
+
+    function showSpecial(data) {
+      playSound(data.points > 0 ? 'success' : 'fail');
+      const modal = document.getElementById('special-modal');
+      const content = document.getElementById('special-modal-content');
+      content.className = `relative rounded-3xl p-10 max-w-md w-full text-center shadow-2xl animate-bounce-in ${data.color}`;
+      document.getElementById('special-icon').textContent = data.icon;
+      document.getElementById('special-title').textContent = data.title;
+      document.getElementById('special-message').textContent = data.points > 0 ? `ได้รับ ${data.points} คะแนน` : `ถูกหัก ${Math.abs(data.points)} คะแนน`;
+      
+      if(gameState.currentTeam === 1) gameState.team1Score += data.points;
+      else gameState.team2Score += data.points;
+      
+      if(gameState.team1Score < 0) gameState.team1Score = 0;
+      if(gameState.team2Score < 0) gameState.team2Score = 0;
+      
+      updateStats();
+      modal.classList.remove('hidden');
+    }
+
+    function showResult(isCorrect, pts) {
+      const modal = document.getElementById('result-modal');
+      document.getElementById('result-icon').textContent = isCorrect ? '✅' : '❌';
+      document.getElementById('result-title').textContent = isCorrect ? 'ยอดเยี่ยม!' : 'พลาดไปนิด!';
+      document.getElementById('result-title').className = `text-3xl font-bold mb-2 ${isCorrect ? 'text-green-500' : 'text-red-500'}`;
+      document.getElementById('result-message').textContent = isCorrect ? `ได้รับ ${pts} คะแนน` : 'พยายามใหม่ในตาหน้า';
+      modal.classList.remove('hidden');
+    }
+
+    function updateStats() {
+      document.getElementById('team1-score').textContent = gameState.team1Score;
+      document.getElementById('team2-score').textContent = gameState.team2Score;
+      document.getElementById('current-turn').textContent = gameState.currentTeam === 1 ? (config.team1_name || 'ทีม 1') : (config.team2_name || 'ทีม 2');
+      document.getElementById('current-turn').className = `text-sm md:text-2xl font-black truncate ${gameState.currentTeam === 1 ? 'text-red-400' : 'text-blue-400'}`;
+      
+      const prog = (gameState.cardsOpened / 24) * 100;
+      document.getElementById('progress-bar').style.width = `${prog}%`;
+      document.getElementById('progress-text').textContent = `${gameState.cardsOpened}/24`;
+      
+      if(gameState.cardsOpened === 24) setTimeout(showEnd, 1000);
+    }
+
+    function showEnd() {
+      document.getElementById('game-screen').classList.add('hidden');
+      document.getElementById('end-screen').classList.remove('hidden');
+      document.getElementById('end-team1-score').textContent = gameState.team1Score;
+      document.getElementById('end-team2-score').textContent = gameState.team2Score;
+      
+      const t1 = config.team1_name || 'ทีม 1';
+      const t2 = config.team2_name || 'ทีม 2';
+      const win = document.getElementById('winner-announcement');
+      if(gameState.team1Score > gameState.team2Score) win.textContent = `🏆 ${t1} ชนะ!`;
+      else if(gameState.team2Score > gameState.team1Score) win.textContent = `🏆 ${t2} ชนะ!`;
+      else win.textContent = "🤝 เสมอกัน!";
+    }
+
+    // --- Listeners ---
+    document.getElementById('start-btn').onclick = () => {
+      playSound('success');
+      gameState.cards = initCards();
+      renderBoard();
+      updateStats();
+      document.getElementById('start-screen').classList.add('hidden');
+      document.getElementById('game-screen').classList.remove('hidden');
+    };
+
+    document.getElementById('next-team-btn').onclick = () => {
+      gameState.currentTeam = gameState.currentTeam === 1 ? 2 : 1;
+      updateStats();
+    };
+
+    document.getElementById('next-turn-btn').onclick = () => {
+      document.getElementById('result-modal').classList.add('hidden');
+      gameState.currentTeam = gameState.currentTeam === 1 ? 2 : 1;
+      updateStats();
+    };
+
+    document.getElementById('special-close-btn').onclick = () => {
+      document.getElementById('special-modal').classList.add('hidden');
+      gameState.currentTeam = gameState.currentTeam === 1 ? 2 : 1;
+      updateStats();
+    };
+
+    document.getElementById('restart-btn').onclick = () => location.reload();
+    document.getElementById('home-btn').onclick = () => location.reload();
+
+    // Element SDK
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange: (newCfg) => { 
+          config = { ...defaultConfig, ...newCfg };
+          updateStats();
+        }
+      });
+    }
+
+    lucide.createIcons();
+  </script>
+</body>
+</html>
