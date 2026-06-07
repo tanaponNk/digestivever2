@@ -365,11 +365,10 @@
                   <th class="px-4 py-3 text-left">ชื่อ</th>
                   <th class="px-4 py-3 text-center">ชั้น</th>
                   <th class="px-4 py-3 text-center">เลขที่</th>
-                  <th class="px-4 py-3 text-center">คะแนนทีม 1</th>
-                  <th class="px-4 py-3 text-center">คะแนนทีม 2</th>
-                  <th class="px-4 py-3 text-center">ผู้ชนะ</th>
+                  <th class="px-4 py-3 text-center">คะแนน</th>
+                  <th class="px-4 py-3 text-center">ผล</th>
                   <th class="px-4 py-3 text-center">รอบ</th>
-                  <th class="px-4 py-3 text-center">จำนวน Card</th>
+                  <th class="px-4 py-3 text-center">Card</th>
                   <th class="px-4 py-3 text-center hidden md:table-cell">วันที่</th>
                 </tr>
               </thead>
@@ -431,7 +430,7 @@
       team1_name: 'ทีม 1',
       team2_name: 'ทีม 2',
       // ===== ตั้งค่า Google Apps Script URL ตรงนี้ =====
-      sheet_url: 'https://script.google.com/macros/s/AKfycbxfVmu1jC8B_j4Fb2Uh8FKLrmVycq9MSHaI6wwBfyvih3TBTDreTia1ikYMb9Dv2V7f/exec'
+      sheet_url: 'https://script.google.com/macros/s/AKfycbzsCw8x2BUtmWFcnC9Wc5HrrdHdzwzbFiDub3t9QE_AF2G38b9AU8eo2X70Zt47RyaqOw/exec'
       // =================================================
     };
     let config = { ...defaultConfig };
@@ -698,19 +697,18 @@
       const t2name = playerInfo.t2.name || 'ทีม 2';
       const winner = gameState.team1Score > gameState.team2Score ? t1name :
                      gameState.team2Score > gameState.team1Score ? t2name : 'เสมอ';
-      // รอบที่เล่น — นับสะสมจาก localStorage (ครั้งที่ 1, 2, 3, ...)
-      const currentRound = (parseInt(localStorage.getItem('gameRoundCount') || '0')) + 1;
-      localStorage.setItem('gameRoundCount', currentRound);
       const statusEl = document.getElementById('save-status');
       statusEl.textContent = '⏳ กำลังบันทึก…';
-      // บันทึก 2 แถวต่อเกม — แถวละ 1 ทีม (ชื่อ/ชั้น/เลขที่ของตัวเอง, คะแนนเหมือนกัน)
-      const p1 = new URLSearchParams({ action:'save', name: t1name, cls: playerInfo.t1.cls, num: playerInfo.t1.num, s1: gameState.team1Score, s2: gameState.team2Score, winner, rounds: currentRound, cards: gameState.totalCards });
-      const p2 = new URLSearchParams({ action:'save', name: t2name, cls: playerInfo.t2.cls, num: playerInfo.t2.num, s1: gameState.team1Score, s2: gameState.team2Score, winner, rounds: currentRound, cards: gameState.totalCards });
+      // บันทึก 1 แถวต่อเกม — ทั้งสองทีมในแถวเดียว (ตรงกับ Apps Script schema ปัจจุบัน)
+      const params = new URLSearchParams({
+        action: 'save',
+        t1name, t1cls: playerInfo.t1.cls, t1num: playerInfo.t1.num,
+        t2name, t2cls: playerInfo.t2.cls, t2num: playerInfo.t2.num,
+        s1: gameState.team1Score, s2: gameState.team2Score,
+        winner, cards: gameState.totalCards
+      });
       try {
-        await Promise.all([
-          fetch(`${url}?${p1}`, { mode: 'no-cors' }),
-          fetch(`${url}?${p2}`, { mode: 'no-cors' })
-        ]);
+        await fetch(`${url}?${params}`, { mode: 'no-cors' });
         statusEl.textContent = '✅ บันทึกข้อมูลทั้งสองทีมลง Google Sheet เรียบร้อย!';
         statusEl.className = 'mt-4 text-sm font-medium text-green-400 min-h-[24px]';
       } catch {
@@ -756,50 +754,54 @@
         // rows[0] is header row; skip it and filter non-empty
         const dataRows = rows.slice(1).filter(r => r[1]);
 
-        // schema: [date(0), name(1), cls(2), num(3), s1(4), s2(5), winner(6), rounds(7)]
-        // Sort by max(s1, s2) descending
-        dataRows.sort((a, b) => Math.max(Number(b[4])||0, Number(b[5])||0) - Math.max(Number(a[4])||0, Number(a[5])||0));
+        // schema: [date(0),t1name(1),t1cls(2),t1num(3),t2name(4),t2cls(5),t2num(6),s1(7),s2(8),winner(9),rounds(10),cards(11)]
+        // แตก 1 game row → 2 team rows
+        let teamRows = [];
+        dataRows.forEach(r => {
+          const winner = r[9] || '-';
+          const rounds = dataRows.indexOf(r) + 1;
+          const cards  = r[11] || '-';
+          const dateStr = r[0] ? String(r[0]).replace('T',' ').replace(/\.\d+Z$/,'') : '-';
+          const s1 = Number(r[7]) || 0;
+          const s2 = Number(r[8]) || 0;
+          teamRows.push({ name: r[1]||'-', cls: r[2]||'-', num: r[3]||'-', score: s1, winner, rounds, cards, dateStr, isWinner: winner === (r[1]||'') });
+          teamRows.push({ name: r[4]||'-', cls: r[5]||'-', num: r[6]||'-', score: s2, winner, rounds, cards, dateStr, isWinner: winner === (r[4]||'') });
+        });
 
-        // Summary stats
+        // เรียงตามคะแนนสูงสุด
+        teamRows.sort((a, b) => b.score - a.score);
+
+        // Summary stats (นับ game ไม่ใช่ team)
         document.getElementById('dash-total-games').textContent = dataRows.length;
-        const allScores = dataRows.map(r => Math.max(Number(r[4]) || 0, Number(r[5]) || 0));
+        const allScores = teamRows.map(t => t.score);
         document.getElementById('dash-top-score').textContent = allScores.length ? Math.max(...allScores) : 0;
         document.getElementById('dash-avg-score').textContent = allScores.length ? Math.round(allScores.reduce((a, b) => a + b, 0) / allScores.length) : 0;
 
-        if (!dataRows.length) {
+        if (!teamRows.length) {
           tbody.innerHTML = '<tr><td colspan="8" class="text-center py-12 text-white/30">ยังไม่มีข้อมูลการเล่น</td></tr>';
           statusEl.textContent = `โหลดสำเร็จ — ยังไม่มีข้อมูล`;
           return;
         }
 
         const medals = ['🥇', '🥈', '🥉'];
-        tbody.innerHTML = dataRows.map((r, i) => {
+        tbody.innerHTML = teamRows.map((t, i) => {
           const rank = i < 3 ? medals[i] : `#${i + 1}`;
-          // schema: [date(0), name(1), cls(2), num(3), s1(4), s2(5), winner(6), rounds(7)]
-          const name   = r[1] || '-';
-          const cls    = r[2] || '-';
-          const num    = r[3] || '-';
-          const s1     = Number(r[4]) || 0;
-          const s2     = Number(r[5]) || 0;
-          const winner = r[6] || '-';
-          const rounds = r[7] || '-';
-          const cardCount = r[8] || '-';
-          const winnerBadge = winner === 'เสมอ'
+          const resultBadge = t.winner === 'เสมอ'
             ? `<span class="px-2 py-0.5 bg-gray-500/40 rounded-full text-gray-300 text-xs">🤝 เสมอ</span>`
-            : `<span class="px-2 py-0.5 bg-yellow-500/30 rounded-full text-yellow-300 text-xs">🏆 ${winner}</span>`;
-          const dateStr = r[0] ? String(r[0]).replace('T',' ').replace(/\.\d+Z$/,'') : '-';
+            : t.isWinner
+              ? `<span class="px-2 py-0.5 bg-green-500/30 rounded-full text-green-300 text-xs">🏆 ชนะ</span>`
+              : `<span class="px-2 py-0.5 bg-red-500/20 rounded-full text-red-300 text-xs">แพ้</span>`;
           return `
             <tr class="border-t border-white/5 hover:bg-white/5 transition-colors">
               <td class="px-4 py-3 text-center text-lg">${rank}</td>
-              <td class="px-4 py-3 font-semibold text-white">${name}</td>
-              <td class="px-4 py-3 text-center text-white/70">${cls}</td>
-              <td class="px-4 py-3 text-center text-white/70">${num}</td>
-              <td class="px-4 py-3 text-center font-bold text-red-300">${s1}</td>
-              <td class="px-4 py-3 text-center font-bold text-blue-300">${s2}</td>
-              <td class="px-4 py-3 text-center">${winnerBadge}</td>
-              <td class="px-4 py-3 text-center text-white/70">${rounds}</td>
-              <td class="px-4 py-3 text-center text-white/70">${cardCount}</td>
-              <td class="px-4 py-3 text-center text-white/40 text-xs hidden md:table-cell">${dateStr}</td>
+              <td class="px-4 py-3 font-semibold text-white">${t.name}</td>
+              <td class="px-4 py-3 text-center text-white/70">${t.cls}</td>
+              <td class="px-4 py-3 text-center text-white/70">${t.num}</td>
+              <td class="px-4 py-3 text-center font-black text-2xl ${t.isWinner ? 'text-yellow-300' : 'text-white/80'}">${t.score}</td>
+              <td class="px-4 py-3 text-center">${resultBadge}</td>
+              <td class="px-4 py-3 text-center text-white/70">${t.rounds}</td>
+              <td class="px-4 py-3 text-center text-white/70">${t.cards}</td>
+              <td class="px-4 py-3 text-center text-white/40 text-xs hidden md:table-cell">${t.dateStr}</td>
             </tr>`;
         }).join('');
         statusEl.textContent = `โหลดสำเร็จ — ${dataRows.length} รายการ`;
