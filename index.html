@@ -113,34 +113,76 @@
           </div>
         </div>
         
-        <!-- Forms and Rules Container -->
-        <div class="grid md:grid-cols-2 gap-4 md:gap-6 mb-8 max-w-4xl mx-auto">
-          <!-- Player Info -->
-          <div class="bg-white/95 rounded-2xl p-5 md:p-6 shadow-xl border-t-4 border-blue-500 text-left">
-            <h3 class="text-lg md:text-xl font-bold text-blue-600 mb-4 flex items-center gap-2"><span>👤</span> ข้อมูลผู้เล่น</h3>
-            <div class="space-y-3">
-              <input id="player-name" type="text" placeholder="ชื่อ-นามสกุล" class="w-full px-4 py-2.5 rounded-xl border-2 border-gray-200 focus:border-blue-400 focus:outline-none text-gray-700 font-medium">
-              <div class="grid grid-cols-2 gap-3">
-                <input id="player-class" type="text" placeholder="ชั้นเรียน" class="w-full px-4 py-2.5 rounded-xl border-2 border-gray-200 focus:border-blue-400 focus:outline-none text-gray-700 font-medium">
-                <input id="player-number" type="number" placeholder="เลขที่" class="w-full px-4 py-2.5 rounded-xl border-2 border-gray-200 focus:border-blue-400 focus:outline-none text-gray-700 font-medium">
+        <!-- datalist for autocomplete past players -->
+        <datalist id="past-players-list"></datalist>
+
+        <!-- Team 1 & 2 Info -->
+        <div class="grid grid-cols-2 gap-3 mb-3 max-w-4xl mx-auto">
+          <!-- Team 1 -->
+          <div class="bg-white/95 rounded-2xl p-4 shadow-xl border-t-4 border-red-500 text-left">
+            <h3 class="text-sm md:text-lg font-bold text-red-500 mb-3 flex items-center gap-1.5">🔴 ทีม 1</h3>
+            <div class="space-y-2">
+              <input id="t1-name" list="past-players-list" type="text" placeholder="ชื่อ-นามสกุล" autocomplete="off"
+                class="w-full px-3 py-2 rounded-xl border-2 border-gray-200 focus:border-red-400 focus:outline-none text-gray-700 font-medium text-sm">
+              <div class="grid grid-cols-2 gap-2">
+                <input id="t1-class" type="text" placeholder="ชั้นเรียน"
+                  class="w-full px-3 py-2 rounded-xl border-2 border-gray-200 focus:border-red-400 focus:outline-none text-gray-700 font-medium text-sm">
+                <input id="t1-number" type="number" placeholder="เลขที่"
+                  class="w-full px-3 py-2 rounded-xl border-2 border-gray-200 focus:border-red-400 focus:outline-none text-gray-700 font-medium text-sm">
               </div>
             </div>
           </div>
-          
+
+          <!-- Team 2 -->
+          <div class="bg-white/95 rounded-2xl p-4 shadow-xl border-t-4 border-blue-500 text-left">
+            <h3 class="text-sm md:text-lg font-bold text-blue-500 mb-3 flex items-center gap-1.5">🔵 ทีม 2</h3>
+            <div class="space-y-2">
+              <input id="t2-name" list="past-players-list" type="text" placeholder="ชื่อ-นามสกุล" autocomplete="off"
+                class="w-full px-3 py-2 rounded-xl border-2 border-gray-200 focus:border-blue-400 focus:outline-none text-gray-700 font-medium text-sm">
+              <div class="grid grid-cols-2 gap-2">
+                <input id="t2-class" type="text" placeholder="ชั้นเรียน"
+                  class="w-full px-3 py-2 rounded-xl border-2 border-gray-200 focus:border-blue-400 focus:outline-none text-gray-700 font-medium text-sm">
+                <input id="t2-number" type="number" placeholder="เลขที่"
+                  class="w-full px-3 py-2 rounded-xl border-2 border-gray-200 focus:border-blue-400 focus:outline-none text-gray-700 font-medium text-sm">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rules + Card Count -->
+        <div class="grid grid-cols-2 gap-3 mb-5 max-w-4xl mx-auto">
           <!-- Rules -->
-          <div class="bg-white/95 rounded-2xl p-5 md:p-6 shadow-xl border-t-4 border-yellow-500 text-left">
-            <h3 class="text-lg md:text-xl font-bold text-purple-600 mb-3 flex items-center gap-2"><span>📋</span> กติกา</h3>
-            <ul class="text-gray-600 space-y-2 text-sm md:text-base font-medium">
-              <li class="flex items-center gap-2">🟢 แบ่งเป็น 2 ทีม สลับกันเปิดแผ่นป้าย</li>
-              <li class="flex items-center gap-2">🟢 ตอบถูกรับคะแนนตามแผ่นป้ายนั้น</li>
+          <div class="bg-white/95 rounded-2xl p-4 shadow-xl border-t-4 border-yellow-500 text-left">
+            <h3 class="text-sm md:text-lg font-bold text-purple-600 mb-2 flex items-center gap-1.5">📋 กติกา</h3>
+            <ul class="text-gray-600 space-y-1.5 text-xs md:text-sm font-medium">
+              <li class="flex items-center gap-2">🟢 2 ทีม สลับกันเปิดแผ่นป้าย</li>
+              <li class="flex items-center gap-2">🟢 ตอบถูกรับคะแนนตามแผ่นป้าย</li>
               <li class="flex items-center gap-2">🟢 ระวัง! มีแผ่นป้ายพิเศษซ่อนอยู่</li>
             </ul>
           </div>
+
+          <!-- Card Count Selector -->
+          <div class="bg-white/95 rounded-2xl p-4 shadow-xl border-t-4 border-green-500 text-left">
+            <h3 class="text-sm md:text-lg font-bold text-green-600 mb-3 flex items-center gap-1.5">🃏 จำนวน Card</h3>
+            <div class="grid grid-cols-3 gap-1.5" id="card-count-btns">
+              <button data-count="8"  class="card-count-btn py-2 rounded-xl text-sm font-bold border-2 border-gray-200 text-gray-600 hover:border-green-400 hover:text-green-600 transition-all">8</button>
+              <button data-count="12" class="card-count-btn py-2 rounded-xl text-sm font-bold border-2 border-gray-200 text-gray-600 hover:border-green-400 hover:text-green-600 transition-all">12</button>
+              <button data-count="16" class="card-count-btn py-2 rounded-xl text-sm font-bold border-2 border-gray-200 text-gray-600 hover:border-green-400 hover:text-green-600 transition-all">16</button>
+              <button data-count="20" class="card-count-btn py-2 rounded-xl text-sm font-bold border-2 border-gray-200 text-gray-600 hover:border-green-400 hover:text-green-600 transition-all">20</button>
+              <button data-count="24" class="card-count-btn py-2 rounded-xl text-sm font-bold border-2 border-green-500 bg-green-50 text-green-700 transition-all col-span-2">24 ✓</button>
+            </div>
+            <p class="text-gray-400 text-xs mt-2 text-center">เลือกจำนวน card ที่ต้องการ</p>
+          </div>
         </div>
-        
-        <button id="start-btn" class="group relative px-10 py-4 md:px-14 md:py-6 bg-gradient-to-r from-green-400 to-emerald-600 rounded-full text-white text-2xl md:text-4xl font-bold shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300">
-          <span>🚀 เริ่มสนุกกันเลย!</span>
-        </button>
+
+        <div class="flex flex-col sm:flex-row gap-4 items-center justify-center">
+          <button id="start-btn" class="group relative px-10 py-4 md:px-14 md:py-6 bg-gradient-to-r from-green-400 to-emerald-600 rounded-full text-white text-2xl md:text-4xl font-bold shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300">
+            <span>🚀 เริ่มสนุกกันเลย!</span>
+          </button>
+          <button id="dashboard-btn" class="px-8 py-4 md:px-10 md:py-5 bg-gradient-to-r from-violet-500 to-purple-700 rounded-full text-white text-lg md:text-2xl font-bold shadow-xl hover:scale-105 active:scale-95 transition-all duration-300">
+            📊 ดู Ranking
+          </button>
+        </div>
       </div>
     </div>
     
@@ -244,8 +286,8 @@
       <div class="max-w-xl w-full text-center">
         <div class="text-8xl mb-6 animate-bounce">🏆</div>
         <h2 class="text-4xl md:text-6xl font-black mb-8 text-yellow-400">จบการสำรวจ!</h2>
-        
-        <div class="bg-white/10 backdrop-blur-md rounded-3xl p-8 border border-white/20 mb-8">
+
+        <div class="bg-white/10 backdrop-blur-md rounded-3xl p-8 border border-white/20 mb-6">
           <h3 class="text-xl font-bold mb-6 text-gray-300">สรุปคะแนนสุดท้าย</h3>
           <div class="grid grid-cols-2 gap-4 mb-8">
             <div class="gradient-team1 p-4 rounded-2xl">
@@ -260,11 +302,89 @@
           <div id="winner-announcement" class="text-2xl md:text-3xl font-black text-yellow-400 animate-pulse">
             ทีม 1 ชนะ!
           </div>
+          <!-- Save status -->
+          <div id="save-status" class="mt-4 text-sm font-medium text-white/60 min-h-[24px]"></div>
         </div>
-        
-        <button id="restart-btn" class="px-12 py-5 bg-gradient-to-r from-green-400 to-emerald-600 rounded-full font-bold text-xl hover:scale-105 transition-all">
-          🔄 เริ่มสำรวจใหม่
-        </button>
+
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <button id="restart-btn" class="px-10 py-4 bg-gradient-to-r from-green-400 to-emerald-600 rounded-full font-bold text-lg hover:scale-105 transition-all">
+            🔄 เริ่มสำรวจใหม่
+          </button>
+          <button id="end-dashboard-btn" class="px-10 py-4 bg-gradient-to-r from-violet-500 to-purple-700 rounded-full font-bold text-lg hover:scale-105 transition-all">
+            📊 ดู Ranking
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dashboard Screen -->
+    <div id="dashboard-screen" class="hidden min-h-full w-full flex flex-col p-4 md:p-8 overflow-y-auto" style="background: linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%)">
+      <div class="max-w-4xl mx-auto w-full">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h2 class="text-3xl md:text-4xl font-black text-yellow-400">📊 Leaderboard</h2>
+            <p class="text-white/50 text-sm mt-1">อันดับคะแนนสูงสุดของผู้เล่น</p>
+          </div>
+          <button id="dash-back-btn" class="px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl font-bold text-sm transition-all flex items-center gap-2">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i> กลับ
+          </button>
+        </div>
+
+        <!-- Stats Summary -->
+        <div class="grid grid-cols-3 gap-3 mb-6" id="dash-summary">
+          <div class="bg-white/10 rounded-2xl p-4 text-center border border-white/10">
+            <p class="text-3xl font-black text-cyan-400" id="dash-total-games">0</p>
+            <p class="text-xs text-white/60 mt-1">เกมทั้งหมด</p>
+          </div>
+          <div class="bg-white/10 rounded-2xl p-4 text-center border border-white/10">
+            <p class="text-3xl font-black text-green-400" id="dash-top-score">0</p>
+            <p class="text-xs text-white/60 mt-1">คะแนนสูงสุด</p>
+          </div>
+          <div class="bg-white/10 rounded-2xl p-4 text-center border border-white/10">
+            <p class="text-3xl font-black text-pink-400" id="dash-avg-score">0</p>
+            <p class="text-xs text-white/60 mt-1">คะแนนเฉลี่ย</p>
+          </div>
+        </div>
+
+        <!-- Refresh + status -->
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-white/50 text-xs" id="dash-load-status">กำลังโหลด…</span>
+          <button id="dash-refresh-btn" class="px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5">
+            <i data-lucide="refresh-cw" class="w-3 h-3"></i> รีเฟรช
+          </button>
+        </div>
+
+        <!-- Ranking Table -->
+        <div class="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="bg-white/10 text-white/70 text-xs uppercase tracking-wider">
+                  <th class="px-4 py-3 text-center w-12">อันดับ</th>
+                  <th class="px-4 py-3 text-left">ชื่อ</th>
+                  <th class="px-4 py-3 text-center">ชั้น</th>
+                  <th class="px-4 py-3 text-center">เลขที่</th>
+                  <th class="px-4 py-3 text-center">คะแนนทีม 1</th>
+                  <th class="px-4 py-3 text-center">คะแนนทีม 2</th>
+                  <th class="px-4 py-3 text-center">ผู้ชนะ</th>
+                  <th class="px-4 py-3 text-center">รอบ</th>
+                  <th class="px-4 py-3 text-center">จำนวน Card</th>
+                  <th class="px-4 py-3 text-center hidden md:table-cell">วันที่</th>
+                </tr>
+              </thead>
+              <tbody id="ranking-table-body">
+                <tr><td colspan="8" class="text-center py-12 text-white/30">ยังไม่มีข้อมูล</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- No Sheet URL notice -->
+        <div id="no-sheet-notice" class="hidden mt-6 bg-yellow-500/20 border border-yellow-400/30 rounded-2xl p-5 text-center">
+          <p class="text-yellow-300 font-bold mb-1">⚠️ ยังไม่ได้ตั้งค่า Google Sheet</p>
+          <p class="text-white/60 text-sm">กรุณากลับไปกรอก Google Apps Script URL ในหน้าหลักก่อนเริ่มเกม</p>
+        </div>
       </div>
     </div>
 
@@ -309,7 +429,10 @@
     const defaultConfig = {
       game_title: 'เกมเปิดแผ่นป้ายระบบย่อยอาหาร',
       team1_name: 'ทีม 1',
-      team2_name: 'ทีม 2'
+      team2_name: 'ทีม 2',
+      // ===== ตั้งค่า Google Apps Script URL ตรงนี้ =====
+      sheet_url: 'https://script.google.com/macros/s/AKfycbxfVmu1jC8B_j4Fb2Uh8FKLrmVycq9MSHaI6wwBfyvih3TBTDreTia1ikYMb9Dv2V7f/exec'
+      // =================================================
     };
     let config = { ...defaultConfig };
 
@@ -343,28 +466,48 @@
       { type: 'jackpot', points: 30, icon: '👑', title: 'แจ็คพอตใหญ่!', color: 'bg-gradient-to-br from-pink-500 to-red-600' }
     ];
 
+    let selectedCardCount = 24;
+    let playerInfo = { t1: { name:'', cls:'', num:'' }, t2: { name:'', cls:'', num:'' } };
+
     let gameState = {
       team1Score: 0,
       team2Score: 0,
       currentTeam: 1,
       cardsOpened: 0,
-      cards: []
+      totalCards: 24,
+      cards: [],
+      ended: false
     };
 
-    function initCards() {
+    // Card count button selection
+    document.querySelectorAll('.card-count-btn').forEach(btn => {
+      btn.onclick = () => {
+        selectedCardCount = parseInt(btn.dataset.count);
+        document.querySelectorAll('.card-count-btn').forEach(b => {
+          b.className = 'card-count-btn py-2 rounded-xl text-sm font-bold border-2 border-gray-200 text-gray-600 hover:border-green-400 hover:text-green-600 transition-all';
+          b.textContent = b.dataset.count;
+        });
+        btn.className = 'card-count-btn py-2 rounded-xl text-sm font-bold border-2 border-green-500 bg-green-50 text-green-700 transition-all';
+        if (selectedCardCount === 24) btn.classList.add('col-span-2');
+        btn.textContent = selectedCardCount + ' ✓';
+      };
+    });
+
+    function initCards(total) {
+      const specialCount = Math.max(1, Math.floor(total / 6));
+      const questionCount = total - specialCount;
       let cards = [];
-      let qList = [...questions].sort(() => Math.random() - 0.5);
+      let qList = [...questions].sort(() => Math.random() - 0.5).slice(0, questionCount);
       let sList = [...specialCards].sort(() => Math.random() - 0.5);
       let specialIndices = [];
-      while(specialIndices.length < 4) {
-        let idx = Math.floor(Math.random() * 24);
+      while(specialIndices.length < specialCount) {
+        let idx = Math.floor(Math.random() * total);
         if(!specialIndices.includes(idx)) specialIndices.push(idx);
       }
-
       let qIdx = 0, sIdx = 0;
-      for(let i=0; i<24; i++) {
+      for(let i = 0; i < total; i++) {
         if(specialIndices.includes(i)) {
-          cards.push({ id: i+1, type: 'special', data: sList[sIdx++], opened: false });
+          cards.push({ id: i+1, type: 'special', data: sList[sIdx++ % sList.length], opened: false });
         } else {
           cards.push({ id: i+1, type: 'question', data: qList[qIdx++], points: [5,10,15][Math.floor(Math.random()*3)], opened: false });
         }
@@ -470,14 +613,21 @@
     function updateStats() {
       document.getElementById('team1-score').textContent = gameState.team1Score;
       document.getElementById('team2-score').textContent = gameState.team2Score;
-      document.getElementById('current-turn').textContent = gameState.currentTeam === 1 ? (config.team1_name || 'ทีม 1') : (config.team2_name || 'ทีม 2');
+      const t1 = playerInfo.t1.name || config.team1_name || 'ทีม 1';
+      const t2 = playerInfo.t2.name || config.team2_name || 'ทีม 2';
+      document.getElementById('team1-label').textContent = '🔴 ' + t1;
+      document.getElementById('team2-label').textContent = '🔵 ' + t2;
+      document.getElementById('current-turn').textContent = gameState.currentTeam === 1 ? t1 : t2;
       document.getElementById('current-turn').className = `text-sm md:text-2xl font-black truncate ${gameState.currentTeam === 1 ? 'text-red-400' : 'text-blue-400'}`;
-      
-      const prog = (gameState.cardsOpened / 24) * 100;
+
+      const prog = (gameState.cardsOpened / gameState.totalCards) * 100;
       document.getElementById('progress-bar').style.width = `${prog}%`;
-      document.getElementById('progress-text').textContent = `${gameState.cardsOpened}/24`;
-      
-      if(gameState.cardsOpened === 24) setTimeout(showEnd, 1000);
+      document.getElementById('progress-text').textContent = `${gameState.cardsOpened}/${gameState.totalCards}`;
+
+      if(gameState.cardsOpened === gameState.totalCards && !gameState.ended) {
+        gameState.ended = true;
+        setTimeout(showEnd, 1000);
+      }
     }
 
     function showEnd() {
@@ -485,19 +635,31 @@
       document.getElementById('end-screen').classList.remove('hidden');
       document.getElementById('end-team1-score').textContent = gameState.team1Score;
       document.getElementById('end-team2-score').textContent = gameState.team2Score;
-      
-      const t1 = config.team1_name || 'ทีม 1';
-      const t2 = config.team2_name || 'ทีม 2';
+      const t1 = playerInfo.t1.name || config.team1_name || 'ทีม 1';
+      const t2 = playerInfo.t2.name || config.team2_name || 'ทีม 2';
+      document.getElementById('end-team1-label').textContent = t1;
+      document.getElementById('end-team2-label').textContent = t2;
       const win = document.getElementById('winner-announcement');
       if(gameState.team1Score > gameState.team2Score) win.textContent = `🏆 ${t1} ชนะ!`;
       else if(gameState.team2Score > gameState.team1Score) win.textContent = `🏆 ${t2} ชนะ!`;
       else win.textContent = "🤝 เสมอกัน!";
+      saveToSheet();
     }
 
     // --- Listeners ---
     document.getElementById('start-btn').onclick = () => {
       playSound('success');
-      gameState.cards = initCards();
+      playerInfo = {
+        t1: { name: document.getElementById('t1-name').value.trim(), cls: document.getElementById('t1-class').value.trim(), num: document.getElementById('t1-number').value.trim() },
+        t2: { name: document.getElementById('t2-name').value.trim(), cls: document.getElementById('t2-class').value.trim(), num: document.getElementById('t2-number').value.trim() }
+      };
+      gameState.team1Score = 0;
+      gameState.team2Score = 0;
+      gameState.currentTeam = 1;
+      gameState.cardsOpened = 0;
+      gameState.totalCards = selectedCardCount;
+      gameState.ended = false;
+      gameState.cards = initCards(selectedCardCount);
       renderBoard();
       updateStats();
       document.getElementById('start-screen').classList.add('hidden');
@@ -523,6 +685,152 @@
 
     document.getElementById('restart-btn').onclick = () => location.reload();
     document.getElementById('home-btn').onclick = () => location.reload();
+
+    // --- Google Sheets Integration ---
+    function getSheetUrl() {
+      return (config.sheet_url || '').trim();
+    }
+
+    async function saveToSheet() {
+      const url = getSheetUrl();
+      if (!url) return;
+      const t1name = playerInfo.t1.name || 'ทีม 1';
+      const t2name = playerInfo.t2.name || 'ทีม 2';
+      const winner = gameState.team1Score > gameState.team2Score ? t1name :
+                     gameState.team2Score > gameState.team1Score ? t2name : 'เสมอ';
+      // รอบที่เล่น — นับสะสมจาก localStorage (ครั้งที่ 1, 2, 3, ...)
+      const currentRound = (parseInt(localStorage.getItem('gameRoundCount') || '0')) + 1;
+      localStorage.setItem('gameRoundCount', currentRound);
+      const statusEl = document.getElementById('save-status');
+      statusEl.textContent = '⏳ กำลังบันทึก…';
+      // บันทึก 2 แถวต่อเกม — แถวละ 1 ทีม (ชื่อ/ชั้น/เลขที่ของตัวเอง, คะแนนเหมือนกัน)
+      const p1 = new URLSearchParams({ action:'save', name: t1name, cls: playerInfo.t1.cls, num: playerInfo.t1.num, s1: gameState.team1Score, s2: gameState.team2Score, winner, rounds: currentRound, cards: gameState.totalCards });
+      const p2 = new URLSearchParams({ action:'save', name: t2name, cls: playerInfo.t2.cls, num: playerInfo.t2.num, s1: gameState.team1Score, s2: gameState.team2Score, winner, rounds: currentRound, cards: gameState.totalCards });
+      try {
+        await Promise.all([
+          fetch(`${url}?${p1}`, { mode: 'no-cors' }),
+          fetch(`${url}?${p2}`, { mode: 'no-cors' })
+        ]);
+        statusEl.textContent = '✅ บันทึกข้อมูลทั้งสองทีมลง Google Sheet เรียบร้อย!';
+        statusEl.className = 'mt-4 text-sm font-medium text-green-400 min-h-[24px]';
+      } catch {
+        statusEl.textContent = '❌ บันทึกไม่สำเร็จ กรุณาตรวจสอบ URL';
+        statusEl.className = 'mt-4 text-sm font-medium text-red-400 min-h-[24px]';
+      }
+    }
+
+    async function loadPastPlayers() {
+      const url = getSheetUrl();
+      if (!url) return;
+      try {
+        const res = await fetch(`${url}?t=${Date.now()}`);
+        const rows = await res.json();
+        const names = [...new Set(rows.slice(1).map(r => r[1]).filter(Boolean))];
+        const dl = document.getElementById('past-players-list');
+        dl.innerHTML = names.map(n => `<option value="${n}">`).join('');
+      } catch { /* silently ignore */ }
+    }
+
+    // Load past players when page is ready
+    loadPastPlayers();
+
+    async function loadRankings() {
+      const url = getSheetUrl();
+      const statusEl = document.getElementById('dash-load-status');
+      const tbody = document.getElementById('ranking-table-body');
+      const noNotice = document.getElementById('no-sheet-notice');
+
+      if (!url) {
+        noNotice.classList.remove('hidden');
+        statusEl.textContent = 'ไม่มี URL';
+        tbody.innerHTML = '<tr><td colspan="8" class="text-center py-12 text-white/30">ยังไม่ได้ตั้งค่า Google Sheet</td></tr>';
+        return;
+      }
+      noNotice.classList.add('hidden');
+      statusEl.textContent = '⏳ กำลังโหลดข้อมูล…';
+
+      try {
+        const res = await fetch(`${url}?t=${Date.now()}`);
+        const rows = await res.json();
+
+        // rows[0] is header row; skip it and filter non-empty
+        const dataRows = rows.slice(1).filter(r => r[1]);
+
+        // schema: [date(0), name(1), cls(2), num(3), s1(4), s2(5), winner(6), rounds(7)]
+        // Sort by max(s1, s2) descending
+        dataRows.sort((a, b) => Math.max(Number(b[4])||0, Number(b[5])||0) - Math.max(Number(a[4])||0, Number(a[5])||0));
+
+        // Summary stats
+        document.getElementById('dash-total-games').textContent = dataRows.length;
+        const allScores = dataRows.map(r => Math.max(Number(r[4]) || 0, Number(r[5]) || 0));
+        document.getElementById('dash-top-score').textContent = allScores.length ? Math.max(...allScores) : 0;
+        document.getElementById('dash-avg-score').textContent = allScores.length ? Math.round(allScores.reduce((a, b) => a + b, 0) / allScores.length) : 0;
+
+        if (!dataRows.length) {
+          tbody.innerHTML = '<tr><td colspan="8" class="text-center py-12 text-white/30">ยังไม่มีข้อมูลการเล่น</td></tr>';
+          statusEl.textContent = `โหลดสำเร็จ — ยังไม่มีข้อมูล`;
+          return;
+        }
+
+        const medals = ['🥇', '🥈', '🥉'];
+        tbody.innerHTML = dataRows.map((r, i) => {
+          const rank = i < 3 ? medals[i] : `#${i + 1}`;
+          // schema: [date(0), name(1), cls(2), num(3), s1(4), s2(5), winner(6), rounds(7)]
+          const name   = r[1] || '-';
+          const cls    = r[2] || '-';
+          const num    = r[3] || '-';
+          const s1     = Number(r[4]) || 0;
+          const s2     = Number(r[5]) || 0;
+          const winner = r[6] || '-';
+          const rounds = r[7] || '-';
+          const cardCount = r[8] || '-';
+          const winnerBadge = winner === 'เสมอ'
+            ? `<span class="px-2 py-0.5 bg-gray-500/40 rounded-full text-gray-300 text-xs">🤝 เสมอ</span>`
+            : `<span class="px-2 py-0.5 bg-yellow-500/30 rounded-full text-yellow-300 text-xs">🏆 ${winner}</span>`;
+          const dateStr = r[0] ? String(r[0]).replace('T',' ').replace(/\.\d+Z$/,'') : '-';
+          return `
+            <tr class="border-t border-white/5 hover:bg-white/5 transition-colors">
+              <td class="px-4 py-3 text-center text-lg">${rank}</td>
+              <td class="px-4 py-3 font-semibold text-white">${name}</td>
+              <td class="px-4 py-3 text-center text-white/70">${cls}</td>
+              <td class="px-4 py-3 text-center text-white/70">${num}</td>
+              <td class="px-4 py-3 text-center font-bold text-red-300">${s1}</td>
+              <td class="px-4 py-3 text-center font-bold text-blue-300">${s2}</td>
+              <td class="px-4 py-3 text-center">${winnerBadge}</td>
+              <td class="px-4 py-3 text-center text-white/70">${rounds}</td>
+              <td class="px-4 py-3 text-center text-white/70">${cardCount}</td>
+              <td class="px-4 py-3 text-center text-white/40 text-xs hidden md:table-cell">${dateStr}</td>
+            </tr>`;
+        }).join('');
+        statusEl.textContent = `โหลดสำเร็จ — ${dataRows.length} รายการ`;
+      } catch {
+        statusEl.textContent = '❌ โหลดข้อมูลไม่สำเร็จ';
+        tbody.innerHTML = '<tr><td colspan="8" class="text-center py-12 text-red-400/60">ไม่สามารถดึงข้อมูลได้ กรุณาตรวจสอบ URL และสิทธิ์ Apps Script</td></tr>';
+      }
+    }
+
+    // --- Dashboard Navigation ---
+    function showDashboard(backTo) {
+      document.getElementById('start-screen').classList.add('hidden');
+      document.getElementById('end-screen').classList.add('hidden');
+      const dash = document.getElementById('dashboard-screen');
+      dash.classList.remove('hidden');
+      dash.dataset.backTo = backTo || 'start';
+      loadRankings();
+    }
+
+    document.getElementById('dashboard-btn').onclick = () => showDashboard('start');
+    document.getElementById('end-dashboard-btn').onclick = () => showDashboard('end');
+    document.getElementById('dash-refresh-btn').onclick = loadRankings;
+    document.getElementById('dash-back-btn').onclick = () => {
+      document.getElementById('dashboard-screen').classList.add('hidden');
+      const backTo = document.getElementById('dashboard-screen').dataset.backTo;
+      if (backTo === 'end') {
+        document.getElementById('end-screen').classList.remove('hidden');
+      } else {
+        document.getElementById('start-screen').classList.remove('hidden');
+      }
+    };
 
     // Element SDK
     if (window.elementSdk) {
